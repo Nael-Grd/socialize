@@ -8,10 +8,10 @@
 		<version>4.0.3</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.training</groupId>
-	<artifactId>social-network</artifactId>
+	<groupId>com.app</groupId>
+	<artifactId>socialize</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>social-network</name>
+	<name>socialize</name>
 	<description>Demo project for Spring Boot</description>
 	<url/>
 	<licenses>

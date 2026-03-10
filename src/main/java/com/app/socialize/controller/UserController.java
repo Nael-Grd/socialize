@@ -1,4 +1,4 @@
-package com.training.social_network.controller;
+package com.app.socialize.controller;
 
 import java.util.List;
 
@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.training.social_network.model.User;
-import com.training.social_network.service.UserService;
+import com.app.socialize.model.User;
+import com.app.socialize.service.UserService;
 
 @RestController
 @RequestMapping("/api/users")

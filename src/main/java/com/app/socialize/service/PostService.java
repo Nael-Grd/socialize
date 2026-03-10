@@ -1,11 +1,11 @@
-package com.training.social_network.service;
+package com.app.socialize.service;
 
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.training.social_network.model.Post;
-import com.training.social_network.repository.PostRepository;
+import com.app.socialize.model.Post;
+import com.app.socialize.repository.PostRepository;
 
 @Service
 public class PostService {

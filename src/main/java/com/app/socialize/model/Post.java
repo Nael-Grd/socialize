@@ -1,4 +1,4 @@
-package com.training.social_network.model;
+package com.app.socialize.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -19,7 +19,7 @@ public class Post {
 	private String content;
 	
 	@ManyToOne
-	@JoinColumn(name ="user_id", nullable = false)
+	@JoinColumn(name = "user_id", nullable = false)
 	private User author;
 
 	public Post() {}

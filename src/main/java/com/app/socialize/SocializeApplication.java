@@ -1,18 +1,18 @@
-package com.training.social_network;
+package com.app.socialize;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
-import com.training.social_network.model.User;
-import com.training.social_network.repository.UserRepository;
+import com.app.socialize.model.User;
+import com.app.socialize.repository.UserRepository;
 
 @SpringBootApplication
-public class SocialNetworkApplication {
+public class SocializeApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(SocialNetworkApplication.class, args);
+		SpringApplication.run(SocializeApplication.class, args);
 	}
 	
 	
