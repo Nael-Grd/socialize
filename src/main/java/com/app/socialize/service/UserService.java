@@ -36,4 +36,17 @@ public class UserService {
 		
 		return repository.save(follower);
 	}
+	
+	public User unfollow(Long followerId, Long followedId) {
+		if (followerId.equals(followedId)) {
+	        throw new RuntimeException("Vous ne pouvez pas vous desabonner à vous-même !");
+	    }
+		User follower = repository.findById(followerId).orElseThrow();
+		User followed = repository.findById(followedId).orElseThrow();
+		
+		follower.getFollowing().remove(followed);
+		followed.getFollowers().remove(follower);
+		
+		return repository.save(follower);
+	}
 }

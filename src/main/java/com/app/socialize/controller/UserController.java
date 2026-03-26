@@ -36,4 +36,9 @@ public class UserController {
 	public User addFollow(@PathVariable Long followerId, @PathVariable Long followedId) {
 		return service.follow(followerId, followedId);
 	}
+	
+	@PostMapping("/{followerId}/unfollow/{followedId}")
+	public User unfollow(@PathVariable Long followerId, @PathVariable Long followedId) {
+		return service.unfollow(followerId, followedId);
+	}
 }
