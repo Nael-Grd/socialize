@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.app.socialize.dto.PostResponse;
 import com.app.socialize.model.Post;
 import com.app.socialize.service.PostService;
 
@@ -39,7 +40,7 @@ public class PostController {
 	}
 	
 	@GetMapping("/feed/{userId}")
-	public List<Post> getFeed(@PathVariable Long userId) {
+	public List<PostResponse> getFeed(@PathVariable Long userId) {
 		return service.getFeed(userId);
 	}
 }

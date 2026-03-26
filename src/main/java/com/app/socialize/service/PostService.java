@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.app.socialize.dto.PostResponse;
 import com.app.socialize.model.Post;
 import com.app.socialize.repository.PostRepository;
 
@@ -31,7 +32,12 @@ public class PostService {
 		repository.deleteById(postId);
 	}
 	
-	public List<Post> getFeed(Long userId) {
-		return repository.findFeedByUserId(userId);
+	public List<PostResponse> getFeed(Long userId) {
+		List<Post> posts = repository.findFeedByUserId(userId);
+		return posts.stream().map(post -> new PostResponse(post.getId(),   // on transfome les posts en posts response
+													       post.getContent(), 
+														   post.getAuthor().getUsername() 
+	            ))
+	            .toList();
 	}
 }
