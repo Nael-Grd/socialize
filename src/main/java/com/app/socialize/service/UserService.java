@@ -23,4 +23,17 @@ public class UserService {
 	public User createUser(User user) {
 		return repository.save(user);
 	}
+	
+	public User follow(Long followerId, Long followedId) {
+		if (followerId.equals(followedId)) {
+	        throw new RuntimeException("Vous ne pouvez pas vous abonner à vous-même !");
+	    }
+		User follower = repository.findById(followerId).orElseThrow();
+		User followed = repository.findById(followedId).orElseThrow();
+		
+		follower.getFollowing().add(followed);
+		followed.getFollowers().add(follower);
+		
+		return repository.save(follower);
+	}
 }

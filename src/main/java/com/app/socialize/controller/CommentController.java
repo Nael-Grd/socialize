@@ -6,8 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.app.socialize.dto.CommentRequest;
-import com.app.socialize.dto.LikeRequest;
-import com.app.socialize.model.Like;
+import com.app.socialize.model.Comment;
 import com.app.socialize.service.CommentService;
 
 @RestController
@@ -24,4 +23,5 @@ public class CommentController {
 	public Comment addComment(@RequestBody CommentRequest request) {
 		return service.addComment(request.content(), request.userId(), request.postId());
 	}
+
 }

@@ -3,6 +3,7 @@ package com.app.socialize.controller;
 import java.util.List;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,5 +30,10 @@ public class UserController {
 	@PostMapping
 	public User addUser(@RequestBody User user) {
 		return service.createUser(user);
+	}
+	
+	@PostMapping("/{followerId}/follow/{followedId}")
+	public User addFollow(@PathVariable Long followerId, @PathVariable Long followedId) {
+		return service.follow(followerId, followedId);
 	}
 }

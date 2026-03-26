@@ -23,4 +23,11 @@ public class PostService {
 	public Post createPost(Post post) {
 		return repository.save(post);
 	}
+	
+	public void deletePost(Long postId) {
+		if(!repository.existsById(postId)) {
+			throw new RuntimeException("Impossible de supprimer : le post  " + postId + " n'existe pas !");
+		}
+		repository.deleteById(postId);
+	}
 }
