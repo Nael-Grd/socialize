@@ -2,6 +2,9 @@ package com.app.socialize.service;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.app.socialize.dto.PostResponse;
@@ -32,12 +35,15 @@ public class PostService {
 		repository.deleteById(postId);
 	}
 	
-	public List<PostResponse> getFeed(Long userId) {
-		List<Post> posts = repository.findFeedByUserId(userId);
-		return posts.stream().map(post -> new PostResponse(post.getId(),   // on transfome les posts en posts response
-													       post.getContent(), 
-														   post.getAuthor().getUsername() 
-	            ))
-	            .toList();
+	public Page<PostResponse> getFeed(Long userId, int page, int size) {
+		Pageable pageable = PageRequest.of(page, size);
+		
+		Page<Post> posts = repository.findFeedByUserId(userId, pageable);
+		
+		return posts.map(post -> new PostResponse(   // on transfome les posts en posts response
+				post.getId(),   
+				post.getContent(), 
+				post.getAuthor().getUsername() 
+	            ));
 	}
 }
