@@ -30,4 +30,8 @@ public class PostService {
 		}
 		repository.deleteById(postId);
 	}
+	
+	public List<Post> getFeed(Long userId) {
+		return repository.findFeedByUserId(userId);
+	}
 }

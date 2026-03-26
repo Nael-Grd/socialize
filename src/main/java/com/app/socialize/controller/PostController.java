@@ -37,4 +37,9 @@ public class PostController {
 	public void deleteComment(@PathVariable Long id) {
 		service.deletePost(id);
 	}
+	
+	@GetMapping("/feed/{userId}")
+	public List<Post> getFeed(@PathVariable Long userId) {
+		return service.getFeed(userId);
+	}
 }
