@@ -14,9 +14,12 @@ public class AuthService {
 	
 	private PasswordEncoder passwordEncoder;
 	
-	public AuthService(UserRepository repository, PasswordEncoder passwordEncoder) {
+	private JwtService jwtService;
+	
+	public AuthService(UserRepository repository, PasswordEncoder passwordEncoder, JwtService jwtService) {
 		this.repository = repository;
 		this.passwordEncoder = passwordEncoder;
+		this.jwtService = jwtService;
 	}
 	
 	public String login(LoginRequest request) {
@@ -25,7 +28,6 @@ public class AuthService {
 	        throw new RuntimeException("Mot de passe incorrect");
 	    }
 		
-		// Plus tard, on renverra le vrai Token JWT ici
-	    return "Connexion réussie pour " + user.getUsername() + " !";
+	    return jwtService.generateToken(request.email());
 	}
 }

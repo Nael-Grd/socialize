@@ -2,32 +2,37 @@ package com.app.socialize.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 	
+	private JwtAuthenticationFilter filter;
+	
+	public SecurityConfig(JwtAuthenticationFilter filter) {
+		this.filter = filter;
+	}
+	
 	@Bean
-	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            // 1. On désactive la protection CSRF (utile pour les sites web, mais gênant pour les API REST/Postman)
-            .csrf(AbstractHttpConfigurer::disable)  
-            // 2. On configure les autorisations sur nos routes
+            .csrf(csrf -> csrf.disable()) // On désactive la protection CSRF (inutile en JWT)
             .authorizeHttpRequests(auth -> auth
-            	    // On autorise UNIQUEMENT la création de compte (POST)
-            	    .requestMatchers(HttpMethod.POST, "/api/users").permitAll() 	    
-            	    // On prépare le terrain pour la future route de connexion
-            	    .requestMatchers("/api/auth/login").permitAll()     	    
-            	    // On bloque TOUT le reste (le Feed, les Likes, et même le GET /api/users)
-            	    .anyRequest().authenticated()
-            );   
+                .requestMatchers("/api/auth/**").permitAll() // L'entrée est libre pour s'inscrire et se connecter
+                .anyRequest().authenticated() // TOUT LE RESTE est bloqué
+            )
+            // On passe en mode "Sans État" (Stateless) : aucune session n'est sauvegardée en mémoire
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            //  On place notre "videur" JWT juste AVANT le videur par défaut de Spring
+            .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
+
         return http.build();
     }
 	
