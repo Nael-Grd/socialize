@@ -1,5 +1,6 @@
 package com.app.socialize.service;
 
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.app.socialize.model.Comment;
@@ -22,8 +23,10 @@ public class CommentService {
 		this.postRepo = postRepo;
 	}
 	
-	public Comment addComment(String content, Long user_id, Long post_id) {
-		User author = userRepo.findById(user_id).orElseThrow();
+	public Comment addComment(String content, Long post_id) {
+		
+		String currentEmail = SecurityContextHolder.getContext().getAuthentication().getName();
+		User author = userRepo.findByEmail(currentEmail).orElseThrow();
 		Post post = postRepo.findById(post_id).orElseThrow();
 		
 		Comment comment = new Comment(content, author, post);

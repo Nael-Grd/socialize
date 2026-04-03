@@ -21,7 +21,7 @@ public class CommentController {
 	
 	@PostMapping
 	public Comment addComment(@RequestBody CommentRequest request) {
-		return service.addComment(request.content(), request.userId(), request.postId());
+		return service.addComment(request.content(), request.postId());
 	}
 
 }

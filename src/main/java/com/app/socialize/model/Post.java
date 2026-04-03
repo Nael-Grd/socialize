@@ -1,10 +1,14 @@
 package com.app.socialize.model;
 
+import java.time.LocalDateTime;
 import java.util.List;
+
+import org.hibernate.annotations.CreationTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -35,6 +39,10 @@ public class Post {
 	@OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
 	@JsonIgnoreProperties("post") 
 	private List<Comment> comments;
+	
+	@CreationTimestamp
+	@Column(updatable = false)
+	private LocalDateTime createdAt;
 
 	public Post() {}
 	public Post(String content, User author) { this.content = content; this.author = author; }
@@ -44,11 +52,13 @@ public class Post {
 	public User getAuthor() {return author;}
 	public List<Like> getLikes() {return likes;} 
 	public List<Comment> getComments() {return comments;} 
+	public LocalDateTime getCreatedAt() {return createdAt;}
 	
 	public void setId(Long id) {this.id = id;}
 	public void setContent(String content) {this.content = content;}
 	public void setAuthor(User author) {this.author = author;}
 	public void setLikes(List<Like> likes) {this.likes = likes;} 
 	public void setComments(List<Comment> comments) {this.comments = comments;}
+	public void setCreatedAt(LocalDateTime createdAt) {this.createdAt = createdAt;}
 	
 }

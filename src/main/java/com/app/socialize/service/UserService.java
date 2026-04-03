@@ -2,6 +2,7 @@ package com.app.socialize.service;
 
 import java.util.List;
 
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -29,11 +30,13 @@ public class UserService {
 		return repository.save(user);
 	}
 	
-	public User follow(Long followerId, Long followedId) {
-		if (followerId.equals(followedId)) {
+	public User follow(Long followedId) {
+		
+		String currentEmail = SecurityContextHolder.getContext().getAuthentication().getName();
+		User follower = repository.findByEmail(currentEmail).orElseThrow();
+		if (follower.getId().equals(followedId)) {
 	        throw new RuntimeException("Vous ne pouvez pas vous abonner à vous-même !");
-	    }
-		User follower = repository.findById(followerId).orElseThrow();
+	    }	
 		User followed = repository.findById(followedId).orElseThrow();
 		
 		follower.getFollowing().add(followed);
@@ -42,11 +45,13 @@ public class UserService {
 		return repository.save(follower);
 	}
 	
-	public User unfollow(Long followerId, Long followedId) {
-		if (followerId.equals(followedId)) {
-	        throw new RuntimeException("Vous ne pouvez pas vous desabonner à vous-même !");
-	    }
-		User follower = repository.findById(followerId).orElseThrow();
+	public User unfollow(Long followedId) {
+
+		String currentEmail = SecurityContextHolder.getContext().getAuthentication().getName();
+		User follower = repository.findByEmail(currentEmail).orElseThrow();
+		if (follower.getId().equals(followedId)) {
+	        throw new RuntimeException("Vous ne pouvez pas vous désabonner de vous-même !");
+	    }	
 		User followed = repository.findById(followedId).orElseThrow();
 		
 		follower.getFollowing().remove(followed);

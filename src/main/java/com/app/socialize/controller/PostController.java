@@ -37,15 +37,14 @@ public class PostController {
 	}
 	
 	@DeleteMapping("/{id}")
-	public void deleteComment(@PathVariable Long id) {
+	public void deletePost(@PathVariable Long id) {
 		service.deletePost(id);
 	}
 	
-	@GetMapping("/feed/{userId}")
+	@GetMapping("/feed")
 	public Page<PostResponse> getFeed(
-			@PathVariable Long userId,
 	        @RequestParam(defaultValue = "0") int page,
 	        @RequestParam(defaultValue = "10") int size) {
-		return service.getFeed(userId, page, size);
+		return service.getFeed(page, size);
 	}
 }

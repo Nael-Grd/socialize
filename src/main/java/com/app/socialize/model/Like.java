@@ -1,9 +1,14 @@
 package com.app.socialize.model;
 
-import jakarta.persistence.Id;
+import java.time.LocalDateTime;
+
+import org.hibernate.annotations.CreationTimestamp;
+
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
@@ -24,15 +29,20 @@ public class Like {
 	@JoinColumn(name = "post_id", nullable = false)
 	private Post post;
 	
+	@CreationTimestamp
+	@Column(updatable = false)
+	private LocalDateTime createdAt;
+	
 	public Like() {}
 
 	public Long getId() {return id;}
 	public User getUser() {return user;}
 	public Post getPost() {return post;}
+	public LocalDateTime getCreatedAt() {return createdAt;}
 	
 	public void setId(Long id) {this.id = id;}
 	public void setUser(User user) {this.user = user;}
 	public void setPost(Post post) {this.post = post;}
-	
+	public void setCreatedAt(LocalDateTime createdAt) {this.createdAt = createdAt;}
 	
 }

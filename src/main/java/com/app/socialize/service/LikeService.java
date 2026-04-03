@@ -1,5 +1,6 @@
 package com.app.socialize.service;
 
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.app.socialize.model.Like;
@@ -22,12 +23,14 @@ public class LikeService {
         this.userRepo = userRepo;
     }
 	
-	public Like likePost(Long user_id, Long post_id) {
-		User user = userRepo.findById(post_id).orElseThrow();
+	public Like likePost(Long post_id) {
+		
+		String currentEmail = SecurityContextHolder.getContext().getAuthentication().getName();
+		User user = userRepo.findByEmail(currentEmail).orElseThrow();
 		Post post = postRepo.findById(post_id).orElseThrow();
 		
 		if (likeRepo.existsByUserAndPost(user, post)) {
-			throw new RuntimeException("Cet utilisateur à déj& liké ce post !");
+			throw new RuntimeException("Cet utilisateur à déjà liké ce post !");
 		}
 		Like like = new Like();
 		like.setUser(user);
