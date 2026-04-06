@@ -27,12 +27,12 @@ public class PostController {
 	}
 	
 	@GetMapping
-	public List<Post> getPosts() {
+	public List<PostResponse> getAllPost() {
 		return service.getAllPosts();
 	}
 	
 	@PostMapping
-	public Post addPost(@RequestBody Post post) {
+	public PostResponse addPost(@RequestBody Post post) {
 		return service.createPost(post);
 	}
 	

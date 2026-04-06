@@ -1,5 +1,8 @@
 package com.app.socialize.dto;
 
-public record PostResponse(Long id, String content, String author) {
+import java.time.LocalDateTime;
+import java.util.List;
+
+public record PostResponse(Long id, String content, String authorUsername, int likeCount, LocalDateTime createdAt, List<CommentResponse> comments) {
 
 }

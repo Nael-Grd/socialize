@@ -19,7 +19,7 @@ public class LikeController {
 	}
 	
 	@PostMapping("/{postId}")
-	public Like addLike(@PathVariable Long postId) {
+	public boolean addLike(@PathVariable Long postId) {
 		return service.likePost(postId);
 	}
 }

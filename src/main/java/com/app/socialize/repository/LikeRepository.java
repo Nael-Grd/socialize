@@ -1,5 +1,7 @@
 package com.app.socialize.repository;
 
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -15,4 +17,6 @@ public interface LikeRepository extends JpaRepository<Like, Long>{
 
 	// Spring genere : SELECT CASE WHEN COUNT(*) > 0 THEN TRUE ELSE FALSE END FROM likes WHERE user_id = ? AND post_id = ?
 	boolean existsByUserAndPost(User user, Post post);
+	
+	Optional<Like> findByUserAndPost(User user, Post post);
 }
