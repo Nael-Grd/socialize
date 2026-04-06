@@ -32,29 +32,65 @@ public class PostService {
 	}
 	
 	public Post createPost(Post post) {
-		String currentUserEmail = SecurityContextHolder.getContext().getAuthentication().getName();
+		
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		
+		String currentUserEmail;
+		
+		if (principal instanceof User) {
+			currentUserEmail = ((User) principal).getEmail(); 
+		} else if (principal instanceof org.springframework.security.core.userdetails.UserDetails) {
+			currentUserEmail = ((org.springframework.security.core.userdetails.UserDetails) principal).getUsername(); 
+		} else {
+			currentUserEmail = principal.toString(); 
+		}
+
 		User currentUser = userRepository.findByEmail(currentUserEmail)
-	            .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
+	            .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé avec cet email : " + currentUserEmail));
+		
 	    post.setAuthor(currentUser);  
 	    post.setCreatedAt(LocalDateTime.now());
 		return postRepository.save(post);
 	}
 	
-	public void deletePost(Long postId) {
+public void deletePost(Long postId) {
 		
 		Post post = postRepository.findById(postId).orElseThrow(
-				() -> new RuntimeException("Impossible de supprimer : le post  " + postId + " n'existe pas !"));
+				() -> new RuntimeException("Impossible de supprimer : le post " + postId + " n'existe pas !"));
+		
 		String authorEmail = post.getAuthor().getEmail();
-		String contextEmail = SecurityContextHolder.getContext().getAuthentication().getName();
+		
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		String contextEmail;
+		
+		if (principal instanceof User) {
+			contextEmail = ((User) principal).getEmail();
+		} else if (principal instanceof org.springframework.security.core.userdetails.UserDetails) {
+			contextEmail = ((org.springframework.security.core.userdetails.UserDetails) principal).getUsername();
+		} else {
+			contextEmail = principal.toString();
+		}
+
 		if (!authorEmail.equals(contextEmail)) {
 	        throw new RuntimeException("Action non autorisée : vous ne pouvez supprimer que vos propres posts !");
 	    }
+		
 		postRepository.deleteById(postId);
 	}
 	
 	public Page<PostResponse> getFeed(int page, int size) {
 		
-		String currentUserEmail = SecurityContextHolder.getContext().getAuthentication().getName();		
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();	
+		String currentUserEmail;
+		
+		if (principal instanceof User) {
+			currentUserEmail = ((User) principal).getEmail();
+		} else if (principal instanceof org.springframework.security.core.userdetails.UserDetails) {
+			currentUserEmail = ((org.springframework.security.core.userdetails.UserDetails) principal).getUsername();
+		} else {
+			currentUserEmail = principal.toString();
+		}
+		
 		User currentUser = userRepository.findByEmail(currentUserEmail)
 	            .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
 		Pageable pageable = PageRequest.of(page, size);

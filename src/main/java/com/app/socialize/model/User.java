@@ -4,7 +4,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.persistence.CascadeType;
@@ -35,26 +35,26 @@ public class User {
     
     @ManyToMany
     @JoinTable(name = "user_following", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "following_id"))
-    @JsonIgnoreProperties({"followers", "following"})
+    @JsonIgnore
     private Set<User> following = new HashSet<User>();
     
     @ManyToMany(mappedBy = "following")   // miroir 
-    @JsonIgnoreProperties({"followers", "following"})
+    @JsonIgnore
     private Set<User> followers = new HashSet<User>();
     
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)  // ne pas renvoyer le mdp hasher dans le json
     private String password;
     
     @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnoreProperties("author")
+    @JsonIgnore
     private List<Post> posts;
 
     @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnoreProperties("author")
+    @JsonIgnore
     private List<Comment> comments;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnoreProperties("user")
+    @JsonIgnore
     private List<Like> likes;
     
     public User() {}

@@ -32,6 +32,7 @@ public class UserService {
 	
 	public User follow(Long followedId) {
 		
+		
 		String currentEmail = SecurityContextHolder.getContext().getAuthentication().getName();
 		User follower = repository.findByEmail(currentEmail).orElseThrow();
 		if (follower.getId().equals(followedId)) {

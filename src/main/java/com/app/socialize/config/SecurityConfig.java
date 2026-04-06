@@ -4,6 +4,7 @@ import java.util.Arrays;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -31,9 +32,10 @@ public class SecurityConfig {
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             .csrf(csrf -> csrf.disable()) // On désactive la protection CSRF (inutile en JWT)
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/auth/**").permitAll() // L'entrée est libre pour s'inscrire et se connecter
-                .anyRequest().authenticated() // TOUT LE RESTE est bloqué
-            )
+            	    .requestMatchers("/api/auth/**").permitAll() // On laisse tout ouvert pour l'auth
+            	    .requestMatchers(HttpMethod.POST, "/api/users").permitAll() // Seul le POST (inscription) est autorisé ici !
+            	    .anyRequest().authenticated()
+            	)
             // On passe en mode "Sans État" (Stateless) : aucune session n'est sauvegardée en mémoire
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             //  On place notre "videur" JWT juste AVANT le videur par défaut de Spring
