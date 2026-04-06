@@ -1,33 +1,48 @@
-HELP.md
-target/
-.mvn/wrapper/maven-wrapper.jar
-!**/src/main/**/target/
-!**/src/test/**/target/
+# ==========================================
+#           SOCIALIZE - MASTER GITIGNORE
+# ==========================================
 
-### STS ###
-.apt_generated
-.classpath
-.factorypath
-.project
-.settings
-.springBeans
-.sts4-cache
-
-### IntelliJ IDEA ###
-.idea
-*.iws
-*.iml
-*.ipr
-
-### NetBeans ###
-/nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
-build/
-!**/src/main/**/build/
-!**/src/test/**/build/
-
-### VS Code ###
+# --- Dossiers Système & IDE ---
+.DS_Store
 .vscode/
+!.vscode/extensions.json
+.idea/
+*.sw?
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# --- FRONTEND (React / Vite) ---
+frontend/node_modules/
+frontend/dist/
+frontend/dist-ssr/
+frontend/*.local
+frontend/logs
+frontend/*.log
+frontend/npm-debug.log*
+frontend/yarn-debug.log*
+frontend/yarn-error.log*
+frontend/pnpm-debug.log*
+frontend/lerna-debug.log*
+
+# --- BACKEND (Spring Boot / Maven) ---
+backend/target/
+backend/.mvn/wrapper/maven-wrapper.jar
+backend/HELP.md
+backend/build/
+!backend/**/src/main/**/target/
+!backend/**/src/test/**/target/
+
+# Fichiers spécifiques aux outils Java (STS, NetBeans)
+backend/.apt_generated
+backend/.classpath
+backend/.factorypath
+backend/.project
+backend/.settings/
+backend/.springBeans
+backend/.sts4-cache
+backend/nbproject/private/
+backend/nbbuild/
+backend/nbdist/
+backend/.nb-gradle/

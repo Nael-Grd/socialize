@@ -1,0 +1,5 @@
+com\training\social_network\repository\UserRepository.class
+com\training\social_network\service\UserService.class
+com\training\social_network\model\User.class
+com\training\social_network\controller\UserController.class
+com\training\social_network\SocialNetworkApplication.class
