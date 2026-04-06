@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.app.socialize.model.User;
 import com.app.socialize.repository.UserRepository;
+import com.app.socialize.util.SecurityUtils;
 
 @Service
 public class UserService {
@@ -32,8 +33,8 @@ public class UserService {
 	
 	public User follow(Long followedId) {
 		
+		String currentEmail = SecurityUtils.getCurrentUserEmail();
 		
-		String currentEmail = SecurityContextHolder.getContext().getAuthentication().getName();
 		User follower = repository.findByEmail(currentEmail).orElseThrow();
 		if (follower.getId().equals(followedId)) {
 	        throw new RuntimeException("Vous ne pouvez pas vous abonner à vous-même !");
@@ -47,8 +48,9 @@ public class UserService {
 	}
 	
 	public User unfollow(Long followedId) {
-
-		String currentEmail = SecurityContextHolder.getContext().getAuthentication().getName();
+	
+		String currentEmail = SecurityUtils.getCurrentUserEmail();
+		
 		User follower = repository.findByEmail(currentEmail).orElseThrow();
 		if (follower.getId().equals(followedId)) {
 	        throw new RuntimeException("Vous ne pouvez pas vous désabonner de vous-même !");
@@ -60,4 +62,5 @@ public class UserService {
 		
 		return repository.save(follower);
 	}
+	
 }

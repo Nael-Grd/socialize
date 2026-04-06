@@ -1,6 +1,5 @@
 package com.app.socialize.service;
 
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.app.socialize.model.Like;
@@ -9,6 +8,7 @@ import com.app.socialize.model.User;
 import com.app.socialize.repository.LikeRepository;
 import com.app.socialize.repository.PostRepository;
 import com.app.socialize.repository.UserRepository;
+import com.app.socialize.util.SecurityUtils;
 
 @Service
 public class LikeService {
@@ -25,7 +25,8 @@ public class LikeService {
 	
 	public Like likePost(Long post_id) {
 		
-		String currentEmail = SecurityContextHolder.getContext().getAuthentication().getName();
+		String currentEmail = SecurityUtils.getCurrentUserEmail();
+		
 		User user = userRepo.findByEmail(currentEmail).orElseThrow();
 		Post post = postRepo.findById(post_id).orElseThrow();
 		
@@ -38,5 +39,6 @@ public class LikeService {
 		
 		return likeRepo.save(like);
 	}
+	
 
 }
