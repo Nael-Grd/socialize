@@ -1,5 +1,0 @@
-# Created at 2026-03-06T11:21:07.940
-Boot Manifest-JAR contains absolute paths in classpath '\\WSL.LOCALHOST\Debian\home\nael_guerard\PYRAMIDE\FRAMEWORK\social-network\social-network\target\test-classes'
-Hint: <argLine>-Djdk.net.URLClassPath.disableClassPathURLCheck=true</argLine>
-'other' is different type of Path
-

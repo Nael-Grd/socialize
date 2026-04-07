@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.app.socialize.dto.LoginRequest;
+import com.app.socialize.dto.RegisterRequest;
 import com.app.socialize.service.AuthService;
 
 @RestController
@@ -16,6 +17,11 @@ public class AuthController {
 	
 	public AuthController(AuthService service) {
 		this.service = service;
+	}
+	
+	@PostMapping("register")
+	String register(@RequestBody RegisterRequest request) {
+		return service.register(request);
 	}
 	
 	@PostMapping("login")
