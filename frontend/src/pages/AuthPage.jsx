@@ -5,8 +5,8 @@ export default function AuthPage() {
 
 	const [email, setEmail] = useState("");    // boites memoire
 	const [password, setPassword] = useState("");
-  const [username, setUsername] = useState("");
-  const [isLoginView, setIsLoginView] = useState(true);
+    const [username, setUsername] = useState("");
+    const [isLoginView, setIsLoginView] = useState(true);
 	const navigate = useNavigate();
 	
 	const handleSubmit = async (e) => {
@@ -27,9 +27,10 @@ export default function AuthPage() {
             });
 
             if (response.ok) {             
-                const token = await response.text(); 
-                console.log("Connexion réussie ! Voici le Token :", token);     
-                localStorage.setItem("jwt_token", token);
+                const data = await response.json(); 
+                console.log("Connexion réussie ! Voici les données :", data);    
+                localStorage.setItem("jwt_token", data.token);
+                localStorage.setItem("my_username", data.username);
                 navigate("/feed");
                 alert("Connecté avec succès !");
             } else {
@@ -56,9 +57,10 @@ export default function AuthPage() {
             });
 
             if (response.ok) {             
-                const token = await response.text(); 
-                console.log("Inscription réussie ! Voici le Token :", token);     
-                localStorage.setItem("jwt_token", token);
+                const data = await response.json(); 
+                console.log("Connexion réussie ! Voici les données :", data);    
+                localStorage.setItem("jwt_token", data.token);
+                localStorage.setItem("my_username", data.username);
                 navigate("/feed");
                 alert("Compte créé avec succès !");
             } else {

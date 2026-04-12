@@ -2,10 +2,10 @@ package com.app.socialize.service;
 
 import java.util.List;
 
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.app.socialize.dto.UserProfile;
 import com.app.socialize.model.User;
 import com.app.socialize.repository.UserRepository;
 import com.app.socialize.util.SecurityUtils;
@@ -24,6 +24,22 @@ public class UserService {
 	
 	public List<User> getAllUsers() {
 		return repository.findAll();
+	}
+	
+	public UserProfile getUserProfile(String username) {
+		User targetUser = repository.findByUsername(username).orElseThrow(() -> new RuntimeException("Utilisateur introuvable") );
+		
+		String currentEmail = SecurityUtils.getCurrentUserEmail();
+		User currentUser = repository.findByEmail(currentEmail).orElseThrow();
+		
+		boolean isFollowed = targetUser.getFollowers().contains(currentUser);   // on verifie si on suit deja cette personne
+		
+		return new UserProfile(targetUser.getId(), 
+				targetUser.getUsername(), 
+				targetUser.getFollowers().size(), 
+				targetUser.getFollowing().size(), 
+				isFollowed
+		    );
 	}
 	
 	public User createUser(User user) {

@@ -3,6 +3,7 @@ package com.app.socialize.service;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.app.socialize.dto.AuthResponse;
 import com.app.socialize.dto.LoginRequest;
 import com.app.socialize.dto.RegisterRequest;
 import com.app.socialize.model.User;
@@ -23,7 +24,7 @@ public class AuthService {
 		this.jwtService = jwtService;
 	}
 	
-	public String register(RegisterRequest request) {
+	public AuthResponse register(RegisterRequest request) {
 		if (repository.findByEmail(request.email()).isPresent()) {
 	        throw new RuntimeException("Cet email est déjà utilisé !");
 	    }
@@ -33,16 +34,16 @@ public class AuthService {
 		
 		repository.save(newUser);
 		
-		return jwtService.generateToken(request.email());   // se connecte directement apres la creation du compte
+		return new AuthResponse(jwtService.generateToken(request.email()), request.username());  // se connecte directement apres la creation du compte
 		
 	}
 	
-	public String login(LoginRequest request) {
+	public AuthResponse login(LoginRequest request) {
 		User user = repository.findByEmail(request.email()).orElseThrow(() -> new RuntimeException("Email introuvable !"));
 		if (!passwordEncoder.matches(request.password(), user.getPassword())) {
 	        throw new RuntimeException("Mot de passe incorrect");
 	    }
 		
-	    return jwtService.generateToken(request.email());
+		return new AuthResponse(jwtService.generateToken(request.email()), user.getUsername());
 	}
 }

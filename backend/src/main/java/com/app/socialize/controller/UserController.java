@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.app.socialize.dto.UserProfile;
 import com.app.socialize.model.User;
 import com.app.socialize.service.UserService;
 
@@ -25,6 +26,11 @@ public class UserController {
 	@GetMapping
 	public List<User> getUsers() {
 		return service.getAllUsers();
+	}
+	
+	@GetMapping("/{username}")
+	public UserProfile getUserProfile(@PathVariable String username) {
+		return service.getUserProfile(username);
 	}
 	
 	@PostMapping

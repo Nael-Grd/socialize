@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.app.socialize.dto.AuthResponse;
 import com.app.socialize.dto.LoginRequest;
 import com.app.socialize.dto.RegisterRequest;
 import com.app.socialize.service.AuthService;
@@ -20,12 +21,12 @@ public class AuthController {
 	}
 	
 	@PostMapping("register")
-	String register(@RequestBody RegisterRequest request) {
+	AuthResponse register(@RequestBody RegisterRequest request) {
 		return service.register(request);
 	}
 	
 	@PostMapping("login")
-	String login(@RequestBody LoginRequest request) {
+	AuthResponse login(@RequestBody LoginRequest request) {
 		return service.login(request);
 	}
 }
