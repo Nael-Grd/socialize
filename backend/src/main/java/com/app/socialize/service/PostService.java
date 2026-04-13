@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.app.socialize.dto.PostResponse;
 import com.app.socialize.mapper.PostMapper;
@@ -73,6 +74,16 @@ public class PostService {
         Pageable pageable = PageRequest.of(page, size);
         Page<Post> posts = postRepository.findFeedByUserId(currentUser.getId(), pageable);
 
+        return posts.map(postMapper::toResponse);
+    }
+    
+    @Transactional(readOnly = true)
+    public Page<PostResponse> getUserPosts(String username, int page, int size) {
+        
+        Pageable pageable = PageRequest.of(page, size);
+        
+        Page<Post> posts = postRepository.findByAuthorUsernameOrderByCreatedAtDesc(username, pageable);
+        
         return posts.map(postMapper::toResponse);
     }
 }

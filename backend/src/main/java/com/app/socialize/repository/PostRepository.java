@@ -15,4 +15,5 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 	@Query("SELECT p FROM Post p JOIN p.author u JOIN u.followers f WHERE f.id = :userId ORDER BY p.createdAt DESC")
 	Page<Post> findFeedByUserId(@Param("userId") Long userId, Pageable pageable);
 
+	Page<Post> findByAuthorUsernameOrderByCreatedAtDesc(String username, Pageable pageable);
 }

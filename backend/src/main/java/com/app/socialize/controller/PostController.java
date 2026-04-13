@@ -47,4 +47,13 @@ public class PostController {
 	        @RequestParam(defaultValue = "10") int size) {
 		return service.getFeed(page, size);
 	}
+	
+	@GetMapping("/{username}/posts")
+    public Page<PostResponse> getUserPosts(
+            @PathVariable String username,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        
+        return service.getUserPosts(username, page, size);
+    }
 }

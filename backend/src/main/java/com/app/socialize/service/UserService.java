@@ -1,11 +1,14 @@
 package com.app.socialize.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.app.socialize.dto.UserProfile;
+import com.app.socialize.dto.UserSummary;
 import com.app.socialize.model.User;
 import com.app.socialize.repository.UserRepository;
 import com.app.socialize.util.SecurityUtils;
@@ -47,6 +50,7 @@ public class UserService {
 		return repository.save(user);
 	}
 	
+	@Transactional  // on modifie une relatino ManyToMany
 	public User follow(Long followedId) {
 		
 		String currentEmail = SecurityUtils.getCurrentUserEmail();
@@ -63,6 +67,7 @@ public class UserService {
 		return repository.save(follower);
 	}
 	
+	@Transactional
 	public User unfollow(Long followedId) {
 	
 		String currentEmail = SecurityUtils.getCurrentUserEmail();
@@ -78,5 +83,35 @@ public class UserService {
 		
 		return repository.save(follower);
 	}
+	
+	@Transactional(readOnly = true)
+	public List<UserSummary> getFollowers(String username) {
+		
+		User user = repository.findByUsername(username).orElseThrow(() -> new RuntimeException("Utilisateur introuvable"));	
+		
+		return user.getFollowers().stream()
+                .map(u -> new UserSummary(u.getId(), u.getUsername()))
+                .collect(Collectors.toList());
+		
+	}
+	
+	@Transactional(readOnly = true)
+    public List<UserSummary> getFollowing(String username) {
+        User user = repository.findByUsername(username).orElseThrow(() -> new RuntimeException("Utilisateur introuvable"));
+        
+        return user.getFollowing().stream()
+                .map(u -> new UserSummary(u.getId(), u.getUsername()))
+                .collect(Collectors.toList());
+    }
+	
+	@Transactional(readOnly = true)
+    public List<UserSummary> searchUsers(String query) {
+        if (query == null || query.trim().isEmpty()) {
+            return List.of(); 
+        }
+        return repository.findByUsernameContainingIgnoreCase(query).stream()
+                .map(u -> new UserSummary(u.getId(), u.getUsername()))
+                .collect(Collectors.toList());
+    }
 	
 }

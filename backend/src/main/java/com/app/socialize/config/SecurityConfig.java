@@ -34,6 +34,7 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
             	    .requestMatchers("/api/auth/**").permitAll() // On laisse tout ouvert pour l'auth
             	    .requestMatchers(HttpMethod.POST, "/api/users").permitAll() // Seul le POST (inscription) est autorisé ici !
+            	    .requestMatchers("/error").permitAll()
             	    .anyRequest().authenticated()
             	)
             // On passe en mode "Sans État" (Stateless) : aucune session n'est sauvegardée en mémoire
