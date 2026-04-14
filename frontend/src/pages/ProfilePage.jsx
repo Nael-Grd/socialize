@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import PostCard from "../components/PostCard";
 
 export default function ProfilePage() {
 
@@ -150,12 +151,12 @@ export default function ProfilePage() {
     return (
         <div className="flex flex-col items-center min-h-screen bg-gray-50 pt-20">
             
-            <div className="w-[400px] mb-4 flex justify-start">
+           <div className="w-[400px] mb-4 flex justify-start">
                 <button 
-                    onClick={() => navigate("/feed")} 
+                    onClick={() => navigate(-1)} 
                     className="text-blue-500 hover:text-blue-700 font-medium flex items-center gap-2 transition-colors text-sm"
                 >
-                    <span className="text-lg">⬅</span> Retour au fil d'actu
+                    <span className="text-lg">⬅</span> Retour
                 </button>
             </div>
 
@@ -230,9 +231,9 @@ export default function ProfilePage() {
                 </div>
             )}
 
-            {/* SECTION DES PUBLICATIONS */}
-            <div className="w-[400px] mt-8 flex flex-col gap-6 mb-20">
-                <h3 className="font-bold text-xl text-gray-800 border-b-2 border-blue-500 pb-2 self-start">
+            {/* SECTION DES PUBLICATIONS SUR LE PROFIL */}
+            <div className="w-[400px] mt-8 flex flex-col mb-20">
+                <h3 className="font-bold text-xl text-gray-800 border-b-2 border-blue-500 pb-2 self-start mb-6">
                     Publications
                 </h3>
 
@@ -242,27 +243,17 @@ export default function ProfilePage() {
                     </div>
                 ) : (
                     <>
-                        {/* La liste des posts */}
+                        {/*  On appelle notre composant pour chaque post */}
                         {userPosts.map(post => (
-                            <div key={post.id} className="bg-white p-6 rounded-md shadow-sm border border-gray-200">
-                                <div className="flex items-center gap-3 mb-4">
-                                    <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center font-bold text-blue-500 uppercase">
-                                        {post.authorUsername.charAt(0)}
-                                    </div>
-                                    <span className="font-bold text-gray-900">@{post.authorUsername}</span>
-                                </div>
-                                <p className="text-gray-800 leading-relaxed whitespace-pre-wrap">
-                                    {post.content}
-                                </p>
-                            </div>
+                            <PostCard key={post.id} post={post} />
                         ))}
 
-                        {/* LE BOUTON VOIR PLUS */}
+                        {/* Bouton Voir Plus */}
                         {currentPage < totalPages - 1 && (
                             <button 
                                 onClick={loadMorePosts}
                                 disabled={isLoadingPosts}
-                                className="w-full py-3 mt-2 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium rounded-md transition-colors disabled:opacity-50"
+                                className="w-full py-3 mt-2 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium rounded-md transition-colors"
                             >
                                 {isLoadingPosts ? "Chargement..." : "Voir plus de posts"}
                             </button>
