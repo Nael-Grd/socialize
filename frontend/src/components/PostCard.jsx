@@ -1,8 +1,17 @@
 import { useState } from "react";
 
-export default function PostCard({ post, onLike, onAddComment, commentInputValue, onCommentChange }) {
+export default function PostCard({ post, currentUser, onEdit, onDelete, onLike, onAddComment, commentInputValue, onCommentChange }) {
     
     const [showComments, setShowComments] = useState(false);
+    const [isEditing, setIsEditing] = useState(false);
+    const [editedContent, setEditedContent] = useState(post.content);
+
+    const isAuthor = currentUser === post.authorUsername;
+
+    const handleSaveEdit = () => {
+        onEdit(post.id, editedContent);
+        setIsEditing(false);
+    };
 
     return (
         <div className="bg-white p-5 rounded-lg shadow-sm border border-gray-200 mb-4 w-full transition-all hover:shadow-md">
@@ -11,19 +20,43 @@ export default function PostCard({ post, onLike, onAddComment, commentInputValue
             <div className="flex justify-between items-start mb-4">
                 <div className="flex items-center gap-3">
                     <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center font-bold text-blue-500 uppercase">
-                        {post.authorUsername.charAt(0)}
+                        {/* Petite sécurité ici avec le "?" */}
+                        {post.authorUsername ? post.authorUsername.charAt(0) : "?"}
                     </div>
                     <span className="font-bold text-gray-900">@{post.authorUsername}</span>
                 </div>
-                <span className="text-xs text-gray-400">
-                    Posté le : {post.createdAt ? new Date(post.createdAt).toLocaleDateString() : "Date inconnue"}
-                </span>
+                <div className="flex flex-col items-end gap-2">
+                    <span className="text-xs text-gray-400">
+                        {post.createdAt ? new Date(post.createdAt).toLocaleDateString() : "Date inconnue"}
+                    </span>
+                    {/* BOUTONS MODIFIER / SUPPRIMER */}
+                    {isAuthor && !isEditing && (
+                        <div className="flex gap-3 text-sm">
+                            <button onClick={() => setIsEditing(true)} className="text-gray-400 hover:text-blue-500 transition-colors">✏️ Modifier</button>
+                            <button onClick={() => onDelete(post.id)} className="text-gray-400 hover:text-red-500 transition-colors">🗑️ Supprimer</button>
+                        </div>
+                    )}
+                </div>
             </div>
 
             {/* CONTENU */}
-            <p className="text-gray-800 leading-relaxed whitespace-pre-wrap mb-4">
-                {post.content}
-            </p>
+            {isEditing ? (
+                <div className="mb-4">
+                    <textarea 
+                        className="w-full border border-blue-300 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-[100px]"
+                        value={editedContent}
+                        onChange={(e) => setEditedContent(e.target.value)}
+                    />
+                    <div className="flex justify-end gap-2 mt-2">
+                        <button onClick={() => setIsEditing(false)} className="text-gray-600 hover:bg-gray-100 px-3 py-1 rounded transition-colors text-sm font-medium">Annuler</button>
+                        <button onClick={handleSaveEdit} className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded transition-colors text-sm font-bold">Sauvegarder</button>
+                    </div>
+                </div>
+            ) : (
+                <p className="text-gray-800 leading-relaxed whitespace-pre-wrap mb-4">
+                    {post.content}
+                </p>
+            )}
 
             {/* BARRE D'ACTIONS (likes, coms) */}
             <div className="flex justify-between items-center mt-4 border-t pt-3">
@@ -31,7 +64,7 @@ export default function PostCard({ post, onLike, onAddComment, commentInputValue
                     onClick={() => onLike(post.id)} 
                     className="flex items-center gap-2 text-red-500 hover:bg-red-50 px-3 py-1 rounded-full font-medium transition-colors"
                 >
-                    ❤️ {post.likeCount || 0}
+                    ❤️ {post.likes || post.likeCount || 0}
                 </button>
                 
                 {/* Bouton pour dérouler */}

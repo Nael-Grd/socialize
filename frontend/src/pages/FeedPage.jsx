@@ -9,6 +9,8 @@ export default function FeedPage() {
     const [newComments, setNewComments] = useState({});
     const navigate = useNavigate();
 
+    const myUsername = localStorage.getItem("my_username");
+
     // Affichage du feed 
     useEffect(() => {
         const fetchPosts = async () => {
@@ -25,6 +27,12 @@ export default function FeedPage() {
                         "Authorization": `Bearer ${token}` 
                     }
                 });
+                if (response.status === 401 || response.status === 403) {
+                    console.warn("Session expirée, déconnexion automatique.");
+                    localStorage.clear(); // On supprime le token périmé
+                    navigate("/");        // On renvoie à la page de connexion
+                    return;               // On arrête la fonction
+                }
                 if (response.ok) {
 		            const data = await response.json(); 
 		            const fetchedPosts = Array.isArray(data) ? data : data.content;
@@ -55,6 +63,12 @@ export default function FeedPage() {
                 },
                 body: JSON.stringify({ content: newPostContent }) 
             });
+            if (response.status === 401 || response.status === 403) {
+                console.warn("Session expirée, déconnexion automatique.");
+                localStorage.clear(); // On supprime le token périmé
+                navigate("/");        // On renvoie à la page de connexion
+                return;               // On arrête la fonction
+            }
             if (response.ok) {
                 const createdPost = await response.json(); 
                 setPosts([createdPost, ...posts]); 
@@ -73,6 +87,12 @@ export default function FeedPage() {
                 method: "POST",
                 headers: { "Authorization": `Bearer ${token}` }
             });
+            if (response.status === 401 || response.status === 403) {
+                console.warn("Session expirée, déconnexion automatique.");
+                localStorage.clear(); // On supprime le token périmé
+                navigate("/");        // On renvoie à la page de connexion
+                return;               // On arrête la fonction
+            }
             if (response.ok) {
                 const isLiked = await response.json(); 
                 setPosts(posts.map(post => 
@@ -102,7 +122,12 @@ export default function FeedPage() {
                 },
                 body: JSON.stringify({ content: commentContent, postId: postId }) 
             });
-
+            if (response.status === 401 || response.status === 403) {
+                console.warn("Session expirée, déconnexion automatique.");
+                localStorage.clear(); // On supprime le token périmé
+                navigate("/");        // On renvoie à la page de connexion
+                return;               // On arrête la fonction
+            }
             if (response.ok) {
                 const createdComment = await response.json();
                 setPosts(posts.map(post => {
@@ -121,13 +146,51 @@ export default function FeedPage() {
         }
     };
 
+    const handleDeletePost = async (postId) => {
+        if (!window.confirm("Voulez-vous vraiment supprimer ce post ?")) return;
+        try {
+            const token = localStorage.getItem("jwt_token");
+            const res = await fetch(`http://localhost:8080/api/posts/${postId}`, {
+                method: "DELETE",
+                headers: { "Authorization": `Bearer ${token}` }
+            });
+            if (res.ok) {
+                // On met à jour l'écran immédiatement en filtrant le post supprimé
+                setPosts(posts.filter(p => p.id !== postId)); 
+            }
+        } catch (error) {
+            console.error("Erreur suppression", error);
+        }
+    };
+
+    const handleEditPost = async (postId, newContent) => {
+        try {
+            const token = localStorage.getItem("jwt_token");
+            const res = await fetch(`http://localhost:8080/api/posts/${postId}`, {
+                method: "PUT",
+                headers: { 
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "text/plain" 
+                },
+                body: newContent
+            });
+            if (res.ok) {
+                const updatedPost = await res.json();
+                // On remplace l'ancien post par le nouveau dans la liste
+                setPosts(posts.map(p => p.id === postId ? updatedPost : p));
+            }
+        } catch (error) {
+            console.error("Erreur modification", error);
+        }
+    };
+
     return (
         <>
             <Navbar />
             <div className="flex flex-col items-center mt-24 w-full bg-gray-50 min-h-screen">
                 <h1 className="text-3xl font-bold text-blue-600 mb-8">Fil d'Actualité 📰</h1>
                 
-                <div className="w-full max-w-2xl flex flex-col gap-6 mb-10">
+                <div className="w-full max-w-2xl px-4 flex flex-col gap-6 mb-10">
                     
                     {/* Zone de création de post */}
                     <form onSubmit={handleCreatePost} className="bg-white p-4 rounded shadow-md border flex flex-col gap-3">
@@ -151,6 +214,9 @@ export default function FeedPage() {
                             <PostCard 
                                 key={post.id} 
                                 post={post} 
+                                currentUser={myUsername}        
+                                onEdit={handleEditPost}         
+                                onDelete={handleDeletePost}
                                 onLike={handleLike}
                                 onAddComment={(e) => handleAddComment(e, post.id)}
                                 commentInputValue={newComments[post.id] || ""}

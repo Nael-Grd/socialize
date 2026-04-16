@@ -25,7 +25,12 @@ export default function AuthPage() {
                     password: password,
                 }),
             });
-
+            if (response.status === 401 || response.status === 403) {
+                console.warn("Session expirée, déconnexion automatique.");
+                localStorage.clear(); // On supprime le token périmé
+                navigate("/");        // On renvoie à la page de connexion
+                return;               // On arrête la fonction
+            }
             if (response.ok) {             
                 const data = await response.json(); 
                 console.log("Connexion réussie ! Voici les données :", data);    
@@ -55,7 +60,12 @@ export default function AuthPage() {
                     password: password,
                 }),
             });
-
+            if (response.status === 401 || response.status === 403) {
+                console.warn("Session expirée, déconnexion automatique.");
+                localStorage.clear(); // On supprime le token périmé
+                navigate("/");        // On renvoie à la page de connexion
+                return;               // On arrête la fonction
+            }
             if (response.ok) {             
                 const data = await response.json(); 
                 console.log("Connexion réussie ! Voici les données :", data);    

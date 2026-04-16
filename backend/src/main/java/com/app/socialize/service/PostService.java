@@ -52,6 +52,7 @@ public class PostService {
         return postMapper.toResponse(savedPost);
     }
     
+    @Transactional
     public void deletePost(Long postId) {
         String currentEmail = SecurityUtils.getCurrentUserEmail();
         
@@ -63,6 +64,22 @@ public class PostService {
         }
         
         postRepository.deleteById(postId);
+    }
+    
+    @Transactional
+    public PostResponse updatePost(Long postId, String newContent) {
+    	String currentEmail = SecurityUtils.getCurrentUserEmail();
+    	
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new RuntimeException("Post non trouvé"));
+        
+        if (!post.getAuthor().getEmail().equals(currentEmail)) {
+            throw new RuntimeException("Non autorisé à modifier ce post");
+        }
+        
+        post.setContent(newContent);
+        post = postRepository.save(post);
+        return postMapper.toResponse(post); 
     }
     
     public Page<PostResponse> getFeed(int page, int size) {
