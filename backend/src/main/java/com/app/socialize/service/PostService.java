@@ -63,7 +63,7 @@ public class PostService {
             throw new RuntimeException("Action non autorisée !");
         }
         
-        postRepository.deleteById(postId);
+        postRepository.delete(post);
     }
     
     @Transactional
