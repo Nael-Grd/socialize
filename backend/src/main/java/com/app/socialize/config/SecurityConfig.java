@@ -27,23 +27,24 @@ public class SecurityConfig {
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 	    http
-	        .csrf(csrf -> csrf.disable()) // Désactive le CSRF pour les API
-	        .cors(cors -> {
-	            cors.configurationSource(request -> {
-	                org.springframework.web.cors.CorsConfiguration config = new org.springframework.web.cors.CorsConfiguration();
-	                config.setAllowedOrigins(java.util.Collections.singletonList("https://socialize-network.vercel.app"));
-	                config.setAllowedMethods(java.util.Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-	                config.setAllowedHeaders(java.util.Collections.singletonList("*"));
-	                config.setAllowCredentials(true);
-	                config.setMaxAge(3600L); // Important pour les requêtes Preflight
-	                return config;
-	            });
-	        })
+	        .csrf(csrf -> csrf.disable())
+	        
+	        .cors(cors -> cors.configurationSource(request -> {
+	            org.springframework.web.cors.CorsConfiguration config = new org.springframework.web.cors.CorsConfiguration();
+	            config.setAllowedOrigins(java.util.List.of("https://socialize-network.vercel.app"));
+	            config.setAllowedMethods(java.util.Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+	            config.setAllowedHeaders(java.util.Collections.singletonList("*"));
+	            config.setAllowCredentials(true);
+	            return config;
+	        }))
 	        .authorizeHttpRequests(auth -> auth
-	            .requestMatchers("/api/auth/**").permitAll() // Autorise l'inscription/login
+	            .requestMatchers("/api/auth/**").permitAll() 
 	            .anyRequest().authenticated()
 	        )
-	        .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+	        
+	        .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+	        
+	        .addFilterBefore(filter, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter.class);
 
 	    return http.build();
 	}
