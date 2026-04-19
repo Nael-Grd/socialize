@@ -20,7 +20,7 @@ export default function FeedPage() {
                 return;
             }
             try {
-                const response = await fetch("${import.meta.env.VITE_API_URL}/api/posts", {
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/api/posts`, {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json",
@@ -55,7 +55,7 @@ export default function FeedPage() {
         if (!newPostContent.trim()) return; 
         const token = localStorage.getItem("jwt_token");
         try {
-            const response = await fetch("${import.meta.env.VITE_API_URL}/api/posts", {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/api/posts`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -114,7 +114,7 @@ export default function FeedPage() {
 
         const token = localStorage.getItem("jwt_token");
         try {
-            const response = await fetch("${import.meta.env.VITE_API_URL}/api/comments", {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/api/comments`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

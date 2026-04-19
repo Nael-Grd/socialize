@@ -183,7 +183,7 @@ export default function ProfilePage() {
 
         const token = localStorage.getItem("jwt_token");
         try {
-            const response = await fetch("${import.meta.env.VITE_API_URL}/api/comments", {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/api/comments`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
