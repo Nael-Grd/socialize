@@ -4,14 +4,12 @@ import java.util.Arrays;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -27,23 +25,25 @@ public class SecurityConfig {
 	}
 	
 	@Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-            .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-            .csrf(csrf -> csrf.disable()) // On désactive la protection CSRF (inutile en JWT)
-            .authorizeHttpRequests(auth -> auth
-            	    .requestMatchers("/api/auth/**").permitAll() // On laisse tout ouvert pour l'auth
-            	    .requestMatchers(HttpMethod.POST, "/api/users").permitAll() // Seul le POST (inscription) est autorisé ici !
-            	    .requestMatchers("/error").permitAll()
-            	    .anyRequest().authenticated()
-            	)
-            // On passe en mode "Sans État" (Stateless) : aucune session n'est sauvegardée en mémoire
-            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            //  On place notre "videur" JWT juste AVANT le videur par défaut de Spring
-            .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
+	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+	    http
+	        .csrf(csrf -> csrf.disable()) // Désactive le CSRF pour les API
+	        .cors(cors -> cors.configurationSource(request -> {
+	            org.springframework.web.cors.CorsConfiguration config = new org.springframework.web.cors.CorsConfiguration();
+	            config.setAllowedOrigins(java.util.Arrays.asList("https://socialize-network.vercel.app"));
+	            config.setAllowedMethods(java.util.Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+	            config.setAllowedHeaders(java.util.Arrays.asList("*"));
+	            config.setAllowCredentials(true); 
+	            return config;
+	        }))
+	        .authorizeHttpRequests(auth -> auth
+	            .requestMatchers("/api/auth/**").permitAll() // Autorise l'inscription/login
+	            .anyRequest().authenticated()
+	        )
+	        .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
-        return http.build();
-    }
+	    return http.build();
+	}
 	
 	@Bean
 	public PasswordEncoder encode() {
