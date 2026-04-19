@@ -26,7 +26,7 @@ export default function Navbar() {
 
         try {
             const token = localStorage.getItem("jwt_token");
-            const response = await fetch(`http://localhost:8080/api/users/search?query=${query}`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/api/users/search?query=${query}`, {
                 headers: { "Authorization": `Bearer ${token}` }
             });
             if (response.ok) {

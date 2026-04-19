@@ -20,7 +20,7 @@ export default function FeedPage() {
                 return;
             }
             try {
-                const response = await fetch("http://localhost:8080/api/posts", {
+                const response = await fetch("${import.meta.env.VITE_API_URL}/api/posts", {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json",
@@ -55,7 +55,7 @@ export default function FeedPage() {
         if (!newPostContent.trim()) return; 
         const token = localStorage.getItem("jwt_token");
         try {
-            const response = await fetch("http://localhost:8080/api/posts", {
+            const response = await fetch("${import.meta.env.VITE_API_URL}/api/posts", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -83,7 +83,7 @@ export default function FeedPage() {
     const handleLike = async (postId) => {
         const token = localStorage.getItem("jwt_token");
         try {
-            const response = await fetch(`http://localhost:8080/api/likes/${postId}`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/api/likes/${postId}`, {
                 method: "POST",
                 headers: { "Authorization": `Bearer ${token}` }
             });
@@ -114,7 +114,7 @@ export default function FeedPage() {
 
         const token = localStorage.getItem("jwt_token");
         try {
-            const response = await fetch("http://localhost:8080/api/comments", {
+            const response = await fetch("${import.meta.env.VITE_API_URL}/api/comments", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -150,7 +150,7 @@ export default function FeedPage() {
         if (!window.confirm("Voulez-vous vraiment supprimer ce post ?")) return;
         try {
             const token = localStorage.getItem("jwt_token");
-            const res = await fetch(`http://localhost:8080/api/posts/${postId}`, {
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/posts/${postId}`, {
                 method: "DELETE",
                 headers: { "Authorization": `Bearer ${token}` }
             });
@@ -166,7 +166,7 @@ export default function FeedPage() {
     const handleEditPost = async (postId, newContent) => {
         try {
             const token = localStorage.getItem("jwt_token");
-            const res = await fetch(`http://localhost:8080/api/posts/${postId}`, {
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/posts/${postId}`, {
                 method: "PUT",
                 headers: { 
                     "Authorization": `Bearer ${token}`,
@@ -189,7 +189,7 @@ export default function FeedPage() {
 
         try {
             const token = localStorage.getItem("jwt_token");
-            const res = await fetch(`http://localhost:8080/api/comments/${commentId}`, {
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/comments/${commentId}`, {
                 method: "DELETE",
                 headers: { "Authorization": `Bearer ${token}` }
             });

@@ -29,7 +29,7 @@ export default function ProfilePage() {
                 return;
             }
             try {
-                const response = await fetch(`http://localhost:8080/api/users/${username}`, {
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/api/users/${username}`, {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json",
@@ -61,7 +61,7 @@ export default function ProfilePage() {
         const endpoint = isCurrentlyFollowing ? "unfollow" : "follow";
 
         try {
-            const response = await fetch(`http://localhost:8080/api/users/${endpoint}/${profile.id}`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/api/users/${endpoint}/${profile.id}`, {
                 method: "POST", 
                 headers: { "Authorization": `Bearer ${token}` }
             });
@@ -91,7 +91,7 @@ export default function ProfilePage() {
 
         const token = localStorage.getItem("jwt_token");
         try {
-            const response = await fetch(`http://localhost:8080/api/users/${username}/${type}`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/api/users/${username}/${type}`, {
                 headers: { "Authorization": `Bearer ${token}` }
             });
             if (response.status === 401 || response.status === 403) {
@@ -113,7 +113,7 @@ export default function ProfilePage() {
         const token = localStorage.getItem("jwt_token");
         
         try {
-            const response = await fetch(`http://localhost:8080/api/posts/${username}/posts?page=${pageToLoad}&size=5`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/api/posts/${username}/posts?page=${pageToLoad}&size=5`, {
                 headers: { "Authorization": `Bearer ${token}` }
             });
             if (response.status === 401 || response.status === 403) {
@@ -153,7 +153,7 @@ export default function ProfilePage() {
     const handleLike = async (postId) => {
         const token = localStorage.getItem("jwt_token");
         try {
-            const response = await fetch(`http://localhost:8080/api/likes/${postId}`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/api/likes/${postId}`, {
                 method: "POST",
                 headers: { "Authorization": `Bearer ${token}` }
             });
@@ -183,7 +183,7 @@ export default function ProfilePage() {
 
         const token = localStorage.getItem("jwt_token");
         try {
-            const response = await fetch("http://localhost:8080/api/comments", {
+            const response = await fetch("${import.meta.env.VITE_API_URL}/api/comments", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -215,7 +215,7 @@ export default function ProfilePage() {
         if (!window.confirm("Voulez-vous vraiment supprimer ce post ?")) return;
         try {
             const token = localStorage.getItem("jwt_token");
-            const res = await fetch(`http://localhost:8080/api/posts/${postId}`, {
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/posts/${postId}`, {
                 method: "DELETE",
                 headers: { "Authorization": `Bearer ${token}` }
             });
@@ -230,7 +230,7 @@ export default function ProfilePage() {
     const handleEditPost = async (postId, newContent) => {
         try {
             const token = localStorage.getItem("jwt_token");
-            const res = await fetch(`http://localhost:8080/api/posts/${postId}`, {
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/posts/${postId}`, {
                 method: "PUT",
                 headers: { 
                     "Authorization": `Bearer ${token}`,
@@ -252,7 +252,7 @@ export default function ProfilePage() {
         
         try {
             const token = localStorage.getItem("jwt_token");
-            const res = await fetch(`http://localhost:8080/api/comments/${commentId}`, {
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/comments/${commentId}`, {
                 method: "DELETE",
                 headers: { "Authorization": `Bearer ${token}` }
             });
