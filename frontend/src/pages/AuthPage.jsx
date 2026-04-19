@@ -11,6 +11,7 @@ export default function AuthPage() {
 	
 	const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
     
     if (isLoginView) {
         console.log("Tentative de connexion avec :", email, password);
@@ -82,6 +83,7 @@ export default function AuthPage() {
             alert("Impossible de joindre le serveur.");
         }
     }
+    setIsLoading(true);
   };
          
      
@@ -118,8 +120,12 @@ export default function AuthPage() {
           onChange={(e) => setPassword(e.target.value)}
         />
 
-        <button type="submit" className="bg-blue-500 text-white p-2 rounded">
-          {isLoginView ? "Se connecter" : "S'inscrire"}
+        <button 
+            type="submit" 
+            disabled={isLoading} // Désactive le bouton si ça charge
+            className={`p-2 rounded ${isLoading ? "bg-gray-400" : "bg-blue-500"} text-white`}
+        >
+            {isLoading ? "Chargement..." : (isLoginView ? "Se connecter" : "S'inscrire")}
         </button>
       </form>
       <p className="mt-4 cursor-pointer text-blue-500 underline" onClick={() => setIsLoginView(!isLoginView)}>
