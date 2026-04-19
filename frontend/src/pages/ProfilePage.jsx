@@ -246,6 +246,37 @@ export default function ProfilePage() {
             console.error("Erreur modification", error);
         }
     };
+
+    const handleDeleteComment = async (commentId, postId) => {
+        if (!window.confirm("Voulez-vous vraiment supprimer ce commentaire ?")) return;
+        
+        try {
+            const token = localStorage.getItem("jwt_token");
+            const res = await fetch(`http://localhost:8080/api/comments/${commentId}`, {
+                method: "DELETE",
+                headers: { "Authorization": `Bearer ${token}` }
+            });
+
+            if (res.status === 401 || res.status === 403) {
+                localStorage.clear();
+                navigate("/");
+                return;
+            }
+            if (res.ok) {
+                setUserPosts(userPosts.map(post => {
+                    if (post.id === postId) {
+                        return {
+                            ...post,
+                            comments: post.comments.filter(c => c.id !== commentId)
+                        };
+                    }
+                    return post;
+                }));
+            }
+        } catch (error) {
+            console.error("Erreur suppression commentaire", error);
+        }
+    };
     
     if (!profile) {
         return <div className="text-center mt-20 text-gray-500 text-xl">Chargement du profil...</div>;
@@ -347,6 +378,7 @@ export default function ProfilePage() {
                                 currentUser={myUsername}        
                                 onEdit={handleEditPost}         
                                 onDelete={handleDeletePost}
+                                onDeleteComment={handleDeleteComment}
                                 onLike={handleLike}
                                 onAddComment={(e) => handleAddComment(e, post.id)}
                                 commentInputValue={newComments[post.id] || ""}

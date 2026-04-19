@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export default function PostCard({ post, currentUser, onEdit, onDelete, onLike, onAddComment, commentInputValue, onCommentChange }) {
+export default function PostCard({ post, currentUser, onEdit, onDelete, onLike, onAddComment, onDeleteComment, commentInputValue, onCommentChange }) {
     
     const [showComments, setShowComments] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
@@ -86,9 +86,19 @@ export default function PostCard({ post, currentUser, onEdit, onDelete, onLike, 
                             <p className="text-xs text-gray-500 italic mb-2">Aucun commentaire.</p>
                         ) : (
                             post.comments.map((comment) => (
-                                <div key={comment.id} className="text-sm bg-white p-2 rounded border border-gray-200">
-                                    <span className="font-bold text-blue-600 mr-2">{comment.authorUsername}</span>
-                                    <span className="text-gray-700">{comment.content}</span>
+                                <div key={comment.id} className="text-sm bg-white p-2 rounded border border-gray-200 flex justify-between items-start">                                   
+                                    <div>
+                                        <span className="font-bold text-blue-600 mr-2">{comment.authorUsername}</span>
+                                        <span className="text-gray-700">{comment.content}</span>
+                                    </div>
+                                    {currentUser === comment.authorUsername && (
+                                        <button 
+                                            onClick={() => onDeleteComment(comment.id, post.id)} 
+                                            className="text-gray-400 hover:text-red-500 transition-colors ml-2"
+                                            title="Supprimer mon commentaire">
+                                            🗑️
+                                        </button>
+                                    )}
                                 </div>
                             ))
                         )}
