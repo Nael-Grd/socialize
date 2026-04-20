@@ -1,6 +1,5 @@
 package com.app.socialize.controller;
 
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,7 +10,6 @@ import com.app.socialize.dto.LoginRequest;
 import com.app.socialize.dto.RegisterRequest;
 import com.app.socialize.service.AuthService;
 
-@CrossOrigin(origins = "https://socialize-network.vercel.app")
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
