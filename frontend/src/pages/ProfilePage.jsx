@@ -317,16 +317,18 @@ export default function ProfilePage() {
                     </div>
                 </div>
 
-                <button 
-                    onClick={handleFollowClick} 
-                    className={`w-full font-bold py-2.5 rounded-md transition-colors text-sm ${
-                        profile.isFollowedByCurrentUser 
-                            ? "bg-gray-200 text-black hover:bg-gray-300" 
-                            : "bg-blue-500 text-white hover:bg-blue-600" 
-                    }`}
-                >
-                    {profile.isFollowedByCurrentUser ? "Se désabonner" : "S'abonner"}
-                </button>
+                {myUsername !== profile.username && (
+                    <button 
+                        onClick={handleFollowClick} 
+                        className={`w-full font-bold py-2.5 rounded-md transition-colors text-sm mt-4 ${
+                            profile.isFollowedByCurrentUser 
+                                ? "bg-gray-200 text-black hover:bg-gray-300" 
+                                : "bg-blue-500 text-white hover:bg-blue-600" 
+                        }`}
+                    >
+                        {profile.isFollowedByCurrentUser ? "Se désabonner" : "S'abonner"}
+                    </button>
+                )}
             </div>
 
             {/* MODAL (Inchangé) */}

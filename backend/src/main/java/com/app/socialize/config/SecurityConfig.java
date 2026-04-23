@@ -30,7 +30,7 @@ public class SecurityConfig {
 	        .csrf(csrf -> csrf.disable())
 	        .cors(cors -> cors.configurationSource(request -> {
 	            org.springframework.web.cors.CorsConfiguration config = new org.springframework.web.cors.CorsConfiguration();
-	            config.setAllowedOrigins(java.util.List.of("https://socialize-network.vercel.app"));
+	            config.setAllowedOrigins(java.util.List.of("https://socialize-network.vercel.app", "http://localhost:5173"));
 	            config.setAllowedMethods(java.util.Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
 	            config.setAllowedHeaders(java.util.List.of("*"));
 	            config.setAllowCredentials(true);

@@ -40,19 +40,17 @@ export default function Navbar() {
     
     return (
         <>
-            <nav className="fixed top-0 w-full bg-white shadow-md p-4 flex justify-between items-center px-10 z-40">
-                <Link to="/feed" className="text-2xl font-bold text-blue-600">Socialize 🌐</Link>
-                
-                <div className="flex gap-6 items-center">
-                    
+            <nav className="fixed top-0 w-full bg-white shadow-md p-4 flex justify-between items-center px-4 md:px-10 z-40">
+                <Link to="/feed" className="text-xl md:text-2xl font-bold text-blue-600">Socialize 🌐</Link>
+                <div className="flex gap-3 md:gap-6 items-center">                   
                     <button 
                         onClick={() => setIsSearchOpen(true)}
                         className="flex items-center gap-2 bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded-full transition-colors font-medium text-gray-700"
                     >
-                        🔍 Rechercher
+                        🔍 <span className="hidden md:inline">Rechercher</span>
                     </button>
 
-                    <Link to="/feed" className="hover:text-blue-500 font-medium">Fil d'actu</Link>
+                    <Link to="/feed" className="hover:text-blue-500 font-medium text-sm md:text-base">Fil</Link>
                     
                     {myUsername && myUsername !== "undefined" && (
                         <Link to={`/profile/${myUsername}`} className="hover:text-blue-500 font-medium">
@@ -70,27 +68,31 @@ export default function Navbar() {
             </nav>
 
             {isSearchOpen && (
-                <div className="fixed inset-0 bg-[rgba(0,0,0,0.4)] z-50 flex justify-center items-start pt-20">
+            <div className="fixed inset-0 bg-[rgba(0,0,0,0.4)] z-50 flex justify-center items-start pt-20">
+                
+                {/* Clic dans le vide = fermer la recherche */}
+                <div className="absolute inset-0" onClick={() => setIsSearchOpen(false)}></div>
+                
+                {/* La boîte de recherche (C'est ICI que ça change) */}
+                <div className="bg-white w-[90%] md:w-[500px] rounded-xl shadow-2xl p-4 z-10 flex flex-col">
                     
-                    {/* Clic dans le vide = fermer la recherche */}
-                    <div className="absolute inset-0" onClick={() => setIsSearchOpen(false)}></div>
-                    
-                    {/* La boîte de recherche */}
-                    <div className="bg-white w-[500px] rounded-xl shadow-2xl p-4 z-10 flex flex-col">
-                        
-                        <div className="flex justify-between items-center mb-4">
-                            <input 
-                                type="text"
-                                autoFocus
-                                placeholder="Chercher un profil (ex: Naël...)"
-                                className="w-full bg-gray-100 p-3 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 transition-all"
-                                value={searchQuery}
-                                onChange={handleSearch}
-                            />
-                            <button onClick={() => setIsSearchOpen(false)} className="ml-4 text-gray-400 hover:text-red-500 font-bold text-xl">✕</button>
-                        </div>
-
-                        {/* Liste des résultats */}
+                    <div className="flex justify-between items-center mb-4">
+                        <input 
+                            type="text"
+                            autoFocus
+                            placeholder="Chercher un profil..."
+                            className="w-full bg-gray-100 p-3 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                            value={searchQuery}
+                            onChange={handleSearch}
+                        />
+                        <button 
+                            onClick={() => setIsSearchOpen(false)} 
+                            className="ml-4 text-gray-400 hover:text-red-500 font-bold text-xl"
+                        >
+                            ✕
+                        </button>
+                    </div>
+                    {/* Liste des résultats */}
                         <div className="max-h-80 overflow-y-auto flex flex-col gap-1">
                             {searchQuery.length > 0 && searchResults.length === 0 ? (
                                 <p className="text-gray-500 text-center py-4 italic">Aucun utilisateur trouvé.</p>
@@ -114,10 +116,9 @@ export default function Navbar() {
                                 ))
                             )}
                         </div>
-
-                    </div>
                 </div>
-            )}
+            </div>
+        )}                      
         </>
     );
 }

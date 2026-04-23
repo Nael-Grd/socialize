@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { Link } from 'react-router-dom';
+import LinkifyUsername from "./LinkifyUsername";
 
 export default function PostCard({ post, currentUser, onEdit, onDelete, onLike, onAddComment, onDeleteComment, commentInputValue, onCommentChange }) {
     
@@ -22,8 +24,11 @@ export default function PostCard({ post, currentUser, onEdit, onDelete, onLike, 
                     <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center font-bold text-blue-500 uppercase">
                         {/* Petite sécurité ici avec le "?" */}
                         {post.authorUsername ? post.authorUsername.charAt(0) : "?"}
-                    </div>
-                    <span className="font-bold text-gray-900">@{post.authorUsername}</span>
+                    </div>  
+                    <Link to={`/profile/${post.authorUsername}`} 
+                    className="font-bold text-gray-900 hover:text-blue-600 hover:underline transition-colors">
+                        @{post.authorUsername}
+                    </Link>
                 </div>
                 <div className="flex flex-col items-end gap-2">
                     <span className="text-xs text-gray-400">
@@ -53,8 +58,8 @@ export default function PostCard({ post, currentUser, onEdit, onDelete, onLike, 
                     </div>
                 </div>
             ) : (
-                <p className="text-gray-800 leading-relaxed whitespace-pre-wrap mb-4">
-                    {post.content}
+                <p className="text-gray-800">
+                    <LinkifyUsername text={post.content} />
                 </p>
             )}
 
