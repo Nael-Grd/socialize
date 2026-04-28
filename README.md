@@ -55,6 +55,8 @@ npm install
 npm run dev
 ```
 
+L'application Frontend sera disponible à l'adresse indiquée par Vite (généralement http://localhost:5173). Assurez-vous que votre fichier .env côté frontend contient bien VITE_API_URL=http://localhost:8080 pour le développement local.
+
 ## *ENG* English Version
 
 ### Features
@@ -101,4 +103,4 @@ npm install
 # Start the React development server
 npm run dev
 ```
-
+The Frontend application will be available at the address provided by Vite (generally http://localhost:5173). Ensure your frontend .env file contains VITE_API_URL=http://localhost:8080 for local development.
