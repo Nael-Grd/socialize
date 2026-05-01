@@ -206,6 +206,48 @@ public class CommentServiceTest {
 		}
 	}
 	
+	@Test
+	void updateComment_Fail_Comment() {
+		Long id = 1L;
+		String email = "n@g";
+		
+		when(commentRepo.findById(id)).thenReturn(java.util.Optional.empty());
+		
+		try (org.mockito.MockedStatic<SecurityUtils> mockedSecurity = org.mockito.Mockito.mockStatic(SecurityUtils.class)) {
+			mockedSecurity.when(SecurityUtils::getCurrentUserEmail).thenReturn(email);
+			
+			RuntimeException exception = Assertions.assertThrows(RuntimeException.class, () -> {
+				commentService.updateComment(id, "New content");
+			});
+			
+			Assertions.assertEquals("Commentaire non trouvé", exception.getMessage());		
+		}
+	}
+	
+	@Test
+	void updateComment_Fail_Email() {
+		Long id = 1L;
+		String email = "n@g";
+		String wrong_email = "wrong@email";
+		
+		User author = new User();
+		author.setEmail(wrong_email);
+		Comment comment = new Comment();
+		comment.setAuthor(author);
+		
+		when(commentRepo.findById(id)).thenReturn(java.util.Optional.of(comment));
+		
+		try (org.mockito.MockedStatic<SecurityUtils> mockedSecurity = org.mockito.Mockito.mockStatic(SecurityUtils.class)) {
+			mockedSecurity.when(SecurityUtils::getCurrentUserEmail).thenReturn(email);
+			
+			RuntimeException exception = Assertions.assertThrows(RuntimeException.class, () -> {
+				commentService.updateComment(id, "New content");
+			});
+			
+			Assertions.assertEquals("Non autorisé à modifier ce commentaire", exception.getMessage());		
+		}
+	}
+	
 //	@Transactional
 //    public CommentResponse updateComment(Long commentId, String newContent) {
 //    	String currentEmail = SecurityUtils.getCurrentUserEmail();
