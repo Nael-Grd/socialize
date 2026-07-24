@@ -13,7 +13,7 @@ Ce projet implémente un réseau social sous forme d'application web
 ### Fonctionnalités
 
 1. **Authentification Sécurisée :** Inscription et connexion gérées par **Spring Security** et **JSON Web Tokens (JWT)**.
-2. **Fil d'Actualité (Feed) :** Affichage des publications (Posts) avec gestion de la pagination.
+2. **Fil d'Actualité (Feed) :** Affichage des publications avec gestion de la pagination.
 3. **Interactions Sociales :** Possibilité de liker et de commenter les publications en temps réel.
 4. **Profils et Réseau :** Pages de profil individuelles avec gestion des abonnements.
 
@@ -26,7 +26,7 @@ Ce projet implémente un réseau social sous forme d'application web
 ### Frontend (React / Vite)
 
 * React.js (Vite), React Router DOM.
-* Interface responsive conçue avec Tailwind CSS.
+* Interface conçue avec Tailwind CSS.
 
 ## Lancement de l'application (Local)
 
@@ -75,7 +75,7 @@ L'application Frontend sera disponible à l'adresse indiquée par Vite (généra
 ### Frontend (React / Vite)
 
 * React.js (Vite), React Router DOM.
-* Responsive interface built with Tailwind CSS.
+* Interface built with Tailwind CSS.
 
 ## Launching the Application (Local)
 
